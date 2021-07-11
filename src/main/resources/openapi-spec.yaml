@@ -1,0 +1,229 @@
+swagger: '2.0'
+info:
+    title: Address Book API
+    version: 1.0.0
+    description: A brand new API with no content.  Go nuts!
+consumes:
+    - application/json
+produces:
+    - application/json
+paths:
+    /addressbooks:
+        get:
+            responses:
+                '200':
+                    description: Successful response - returns an array of `AddressBook` entities.
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/AddressBook'
+            operationId: getaddressbooks
+            summary: List All addressbooks
+            description: Gets a list of all `AddressBook` entities.
+        post:
+            parameters:
+                -
+                    name: body
+                    description: A new `AddressBook` to be created.
+                    schema:
+                        $ref: '#/definitions/AddressBook'
+                    in: body
+                    required: true
+            responses:
+                '200':
+                    description: Successful response.
+                    schema:
+                        $ref: '#/definitions/AddressBook'
+            operationId: createAddressBook
+            summary: Create a AddressBook
+            description: Creates a new instance of a `AddressBook`.
+    '/addressbooks/{addressbookId}':
+        get:
+            responses:
+                '200':
+                    description: Successful response - returns a single `AddressBook`.
+                    schema:
+                        $ref: '#/definitions/AddressBook'
+                '404':
+                    description: Address book not found
+                    schema:
+                        $ref: '#/definitions/AddressBook'
+            operationId: getAddressBook
+            summary: Get a AddressBook
+            description: Gets the details of a single instance of a `AddressBook`.
+        delete:
+            responses:
+                '204':
+                    description: Successful response.
+                '404':
+                    description: Addressbook ID not found
+            operationId: deleteAddressBook
+            summary: Delete a AddressBook
+            description: Deletes an existing `AddressBook`.
+        parameters:
+            -
+                name: addressbookId
+                description: A unique identifier for a `AddressBook`.
+                in: path
+                required: true
+                type: integer
+    '/addressbooks/{addressbookId}/entries':
+        get:
+            responses:
+                '200':
+                    description: Successful response - returns an array of `Entry` entities.
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Entry'
+                '404':
+                    description: Address book not found
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Entry'
+            operationId: getEntries
+            summary: List all entries in an addressbook
+            description: Gets a list of all `Entry` entities.
+        post:
+            parameters:
+                -
+                    name: body
+                    description: A new `Entry` to be created.
+                    schema:
+                        $ref: '#/definitions/Entry'
+                    in: body
+                    required: true
+            responses:
+                '200':
+                    description: Successful response.
+                    schema:
+                        $ref: '#/definitions/Entry'
+                '404':
+                    description: Address book not found
+            operationId: createEntry
+            summary: Create a Entry
+            description: Creates a new instance of a `Entry`.
+        parameters:
+            -
+                name: addressbookId
+                description: A unique identifier for a `AddressBook`.
+                in: path
+                required: true
+                type: integer
+    '/addressbooks/{addressbookId}/entries/{entryId}':
+        get:
+            responses:
+                '200':
+                    description: Successful response - returns a single `Entry`.
+                    schema:
+                        $ref: '#/definitions/Entry'
+                '404':
+                    description: Address book or entry not found
+                    schema:
+                        $ref: '#/definitions/Entry'
+            operationId: getEntry
+            summary: Get a Entry
+            description: Gets the details of a single instance of a `Entry`.
+        delete:
+            responses:
+                '204':
+                    description: Successful response.
+                '404':
+                    description: Entry ID or Addressbook ID not found
+            operationId: deleteEntry
+            summary: Delete a Entry
+            description: Deletes an existing `Entry`.
+        parameters:
+            -
+                name: addressbookId
+                description: A unique identifier for a `AddressBook`.
+                in: path
+                required: true
+                type: integer
+            -
+                name: entryId
+                description: A unique identifier for a `Entry`.
+                in: path
+                required: true
+                type: integer
+    /entries:
+        get:
+            responses:
+                '200':
+                    description: Successful response - returns an array of `Entry` entities.
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Entry'
+            operationId: getUniqueEntries
+            summary: List all unique entries across all addressbooks
+            description: Gets a list of unqiue `Entry` entities.
+definitions:
+    PhoneNumber:
+        title: Root Type for PhoneNumber
+        description: A phone number entity that holds a entry type and a number
+        required:
+            - type
+            - value
+        type: object
+        properties:
+            type:
+                enum:
+                    - home
+                    - phone
+                    - mobile
+                    - other
+                type: string
+            value:
+                type: string
+        example:
+            type: other
+            value: +61-402009300
+    AddressBook:
+        description: An address book that can hold multiple contacts.
+        required:
+            - id
+            - name
+        type: object
+        properties:
+            id:
+                description: Unique id to identify an address book
+                type: integer
+            name:
+                description: Unique name to identify the address book
+                type: string
+            entries:
+                description: The contact entries held by the book
+                type: array
+                items:
+                    $ref: '#/definitions/Entry'
+    Entry:
+        description: A standard address book entry
+        required:
+            - name
+            - numbers
+            - id
+        type: object
+        properties:
+            name:
+                description: 'Name of the contact '
+                type: string
+            numbers:
+                description: 'List of all numbers for the contact '
+                type: array
+                items:
+                    $ref: '#/definitions/PhoneNumber'
+            id:
+                description: Unique ID
+                type: integer
+        example:
+            name: John Doe
+            numbers:
+                -
+                    type: mobile
+                    value: +61-420972799
+                -
+                    type: home
+                    value: +61-420972798
+            id: 6

@@ -101,7 +101,6 @@ public class AddressBookService {
 			AddressBook addrBook = (AddressBook) iterator.next();
 			for (Iterator<Entry> iterator2 = addrBook.getEntries().iterator(); iterator2.hasNext();) {
 				Entry entry = (Entry) iterator2.next();
-				System.out.println(entries.add(entry));
 			}
 		}
 		return new ArrayList<Entry>(entries);

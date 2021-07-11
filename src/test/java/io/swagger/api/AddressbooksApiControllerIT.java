@@ -49,7 +49,6 @@ public class AddressbooksApiControllerIT {
 		AddressBook addrBook = new AddressBook();
 		addrBook.id(0);
 		addrBook.name("Test");
-		addrBook.addEntriesItem(createEntry());
 		HttpEntity<AddressBook> body = new HttpEntity<>(addrBook);
 
         ResponseEntity<AddressBook> response = restTemplate.exchange(

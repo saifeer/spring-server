@@ -31,7 +31,7 @@ public class AddressBook   {
 
   @JsonProperty("entries")
   @Valid
-  private List<Entry> entries = null;
+  private List<Entry> entries = new ArrayList<Entry>();
 
   public AddressBook id(Integer id) {
     this.id = id;
